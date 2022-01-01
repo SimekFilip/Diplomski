@@ -1,0 +1,14 @@
+#!/bin/bash
+
+OUTPUT="liboracle_trading."
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  OUTPUT+="so"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  OUTPUT+="dylib"
+else
+  echo "Unsupported os type: $OSTYPE. Only linux and darwin are supported for now."
+  exit 1
+fi
+
+echo "Creating $OUTPUT"
+gcc -shared -o $OUTPUT -Wall -O3 -fPIC src/oracle_trading.c

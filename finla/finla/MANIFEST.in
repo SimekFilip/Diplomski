@@ -1,0 +1,4 @@
+include libs/oracle/src/oracle_trading.c
+include libs/oracle/src/oracle_trading.h
+include libs/oracle/make
+
