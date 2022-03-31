@@ -28,7 +28,6 @@ X_train, X_test = scale_data(StandardScaler(), X_train, X_test)
 
 opt = BayesSearchCV(
      LSTMClassifier(),
-     {
          'lr': Real(1e-4, 1e-2, prior='uniform'),
          'l2': Real(1e-4, 1e-2, prior='uniform')
          # 'n_layers': Integer(1, 2),
