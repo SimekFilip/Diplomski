@@ -22,9 +22,10 @@ class Metrics:
     def __init__(self, data):
         self.data = data
 
-    def get_metrics(self, prediction, measures=None, commission=0.01):
+    def get_metrics(self, prediction, measures=None, commission=0.01, trade_on_close=False):
         self.data['Out'] = prediction
-        bt = Backtest(self.data, MyStrategy, cash=10000, commission=commission, exclusive_orders=True)
+        bt = Backtest(self.data, MyStrategy, cash=10000, commission=commission,
+                      exclusive_orders=True, trade_on_close=trade_on_close)
         output = bt.run()
         if measures is None:
             return output
