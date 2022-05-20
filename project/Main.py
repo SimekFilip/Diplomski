@@ -1,4 +1,5 @@
 import numpy as np
+import sys
 import pandas as pd
 import torch
 from skopt import BayesSearchCV
@@ -12,6 +13,8 @@ from DataFactory import get_data, train_test_split, scale_data
 
 aapl = get_data('AAPL', '2000-01-01', '2020-12-31')
 nstep = NStep(aapl, 1)
+
+nstep = nStepLabeling.NStep(aapl, 1)
 aapl = nstep.get_labels()
 
 aapl['return1'] = aapl['Close'].pct_change(1)
@@ -40,10 +43,18 @@ opt = BayesSearchCV(
      },
      cv=TimeSeriesSplit(n_splits=3, max_train_size=5000),
      n_iter=100,
+         'lr': Real(1e-4, 1e-2, prior='uniform'),
+         'l2': Real(1e-4, 1e-2, prior='uniform')
+         # 'n_layers': Integer(1, 2),
+         # 'n_hidden': Integer(8, 64)
+     },
+     cv=TimeSeriesSplit(n_splits=3, max_train_size=1000),
+     n_iter=10,
      random_state=0,
      refit=True
 )
 _ = opt.fit(X_train, y_train)
+
 
 df = pd.DataFrame.from_dict(opt.cv_results_)
 #df.to_csv('out.csv')
@@ -60,4 +71,12 @@ print('test score:', opt.score(X_test, y_test))
 print('train score:', opt.score(X_train, y_train))
 print('best score:', opt.best_score_)
 print('best params:', opt.best_params_)
+
+
+print(opt.score(X_test, y_test))
+print(opt.score(X_train, y_train))
+df = pd.DataFrame.from_dict(opt.cv_results_)
+# pd.set_option('display.max_columns', None)
+# df.to_csv('C:/Filip/FER/5.GODINA/DIPLOMSKI_RAD/out.csv')
+print(df)
 

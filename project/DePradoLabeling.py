@@ -47,4 +47,3 @@ def triple_barrier_labeling(
             labels.append(1 if rtn >= 0 else 0)
 
     return pd.Series(labels, index=dv.index[:-n_step])
-

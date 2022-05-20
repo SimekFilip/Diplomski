@@ -118,3 +118,4 @@ def filter_false_positives(data, commission=0.00):
         if len(output) == 0:
             fp_exist = False
     return data
+    return x
