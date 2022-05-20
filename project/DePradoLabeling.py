@@ -23,9 +23,7 @@ def triple_barrier_labeling(
     price = price.loc[dv.index]
 
     for i in tqdm(range(len(price) - n_step)):
-        starting_price = price.iloc[i]
-        upper_barrier_price = starting_price * (1 + upper_barrier_scaler * dv.iloc[i])
-        bottom_barrier_price = starting_price * (1 - bottom_barrier_scaler * dv.iloc[i])
+
         look_ahead_price_window = price.iloc[i:i + n_step]
 
         upper_barrier_hit = (look_ahead_price_window >= upper_barrier_price).any()
