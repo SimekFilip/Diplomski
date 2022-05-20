@@ -4,7 +4,7 @@ import torch
 import glob
 import yfinance as yf
 from backtesting import Backtest
-from TrendFilteringModel.project.Trading import MyStrategy
+from Trading import MyStrategy
 
 
 def import_data():
