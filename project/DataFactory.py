@@ -3,6 +3,9 @@ import numpy as np
 import torch
 import glob
 import yfinance as yf
+from backtesting import Backtest
+
+from TrendFilteringModel.project.Trading import MyStrategy
 
 
 def import_data():
@@ -97,3 +100,24 @@ def scale_prices(x):
     means = np.mean(x, axis=1).reshape(x.shape[0], 1, x.shape[2])
     x = (x - means) / means
     return x
+
+
+def filter_false_positives(data, commission=0.00):
+    data.index = pd.to_datetime(data.index)
+    col_index = data.columns.get_loc("Out")
+    fp_exist = True
+    while fp_exist:
+        bt = Backtest(data, MyStrategy, cash=10000, commission=commission,
+                      exclusive_orders=True, trade_on_close=False)
+        output = bt.run()
+        output = output.values[-1].iloc[::2]
+        output = output['EntryTime'][output['PnL'] < 0]
+        for row in output:
+            date = row.date()
+            date = pd.to_datetime(date)
+            row_index = data.index.get_loc(date) - 1
+            data.iloc[row_index, col_index] = 0
+        if len(output) == 0:
+            fp_exist = False
+        return data
+        return x
